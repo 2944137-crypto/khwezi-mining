@@ -1,0 +1,6 @@
+username,password,role
+admin,admin123,Administrator
+safety,safety123,Safety Officer
+engineer,engineer123,Mine Engineer
+maintenance,maint123,Maintenance Engineer
+manager,manager123,Manager

@@ -1,0 +1,46 @@
+Worker's ID,Department,Job Role,Shift,PPE,Training,Fatigue Level,Safety Observation(s),Near Misses,Previous Incidents,Risk Level
+WKR-001,Mining Operations (Production),Team Leader,Day Shift,Yes,Yes,5,Barricading not erected before work started,1,0,Medium
+WKR-002,Fixed Plant Maintenance,Rigger,Day Shift,Yes,Yes,5,Excellent PPE discipline,0,0,Medium
+WKR-003,Occupational Health & Safety,Safety Officer,Day Shift,Yes,No,7,Late for pre-shift safety talk,4,0,High
+WKR-004,Mining Operations (Production),Stope Miner,Day Shift,Yes,Yes,2,None,1,1,Low
+WKR-005,Mine Surveying,Survey Assistant,Day Shift,Yes,Yes,6,Fatigue noted at end of shift,3,0,High
+WKR-006,Electrical Engineering,Electrical Engineer,Day Shift,Yes,No,2,Barricading not erected before work started,1,0,High
+WKR-007,Mining Operations (Production),Team Leader,Day Shift,Yes,Yes,5,Good hazard reporting,1,0,Medium
+WKR-008,Mine Surveying,Survey Assistant,Day Shift,Yes,Yes,3,Walkway partly blocked by materials,2,2,High
+WKR-009,Mobile Equipment Maintenance,Auto Electrician,Night Shift,Yes,Yes,4,None,1,0,Low
+WKR-010,Mining Operations (Production),Loco Driver,Night Shift,Yes,Yes,2,Observed working without hearing protection,1,0,Low
+WKR-011,Occupational Health & Safety,Safety Representative,Day Shift,Yes,Yes,1,Housekeeping needs improvement at work area,0,0,Low
+WKR-012,Fixed Plant Maintenance,Electrician,Night Shift,No,Yes,7,Excellent PPE discipline,3,0,High
+WKR-013,Electrical Engineering,Electrical Engineer,Night Shift,No,Yes,7,None,0,2,High
+WKR-014,Fixed Plant Maintenance,Fitter,Day Shift,Yes,Yes,8,Walkway partly blocked by materials,0,0,High
+WKR-015,Electrical Engineering,Instrument Technician,Night Shift,Yes,Yes,4,"Reported worn gloves, replacement issued",2,2,High
+WKR-016,Fixed Plant Maintenance,Electrician,Day Shift,Yes,Yes,6,"Reported worn gloves, replacement issued",2,0,Medium
+WKR-017,Electrical Engineering,Electrical Engineer,Night Shift,No,Yes,2,Housekeeping needs improvement at work area,1,0,High
+WKR-018,Mobile Equipment Maintenance,Diesel Mechanic,Day Shift,Yes,Yes,6,Walkway partly blocked by materials,3,2,High
+WKR-019,Fixed Plant Maintenance,Rigger,Night Shift,Yes,No,3,Walkway partly blocked by materials,1,0,High
+WKR-020,Mining Operations (Production),Rock Drill Operator,Night Shift,Yes,Yes,6,Good hazard reporting,2,0,Medium
+WKR-021,Occupational Health & Safety,Safety Officer,Day Shift,Yes,No,8,"Reported worn gloves, replacement issued",1,0,High
+WKR-022,Occupational Health & Safety,Safety Officer,Day Shift,No,Yes,5,Fatigue noted at end of shift,0,1,High
+WKR-023,Mobile Equipment Maintenance,Auto Electrician,Day Shift,Yes,Yes,4,Observed working without hearing protection,1,3,High
+WKR-024,Fixed Plant Maintenance,Fitter,Day Shift,Yes,Yes,5,Good hazard reporting,2,1,Medium
+WKR-025,Mining Operations (Production),Rock Drill Operator,Night Shift,Yes,Yes,3,Late for pre-shift safety talk,2,1,Low
+WKR-026,Mine Surveying,Survey Assistant,Day Shift,Yes,Yes,6,Walkway partly blocked by materials,0,1,Medium
+WKR-027,Processing / Metallurgy,Metallurgical Technician,Night Shift,Yes,Yes,5,"Reported worn gloves, replacement issued",2,0,Medium
+WKR-028,Mining Operations (Production),Stope Miner,Day Shift,Yes,Yes,3,Observed working without hearing protection,1,0,Low
+WKR-029,Geotechnical Engineering,Geotechnical Engineer,Day Shift,No,Yes,4,Fatigue noted at end of shift,3,2,High
+WKR-030,Electrical Engineering,Instrument Technician,Day Shift,Yes,Yes,4,Late for pre-shift safety talk,0,0,Low
+WKR-031,Processing / Metallurgy,Plant Operator,Night Shift,Yes,Yes,7,Late for pre-shift safety talk,0,0,Medium
+WKR-032,Emergency Response,First Aider,Night Shift,No,Yes,5,None,3,0,High
+WKR-033,Mobile Equipment Maintenance,Diesel Mechanic,Day Shift,Yes,Yes,5,Walkway partly blocked by materials,1,0,Medium
+WKR-034,Electrical Engineering,Electrical Engineer,Day Shift,Yes,No,3,"Reported worn gloves, replacement issued",0,0,High
+WKR-035,Fixed Plant Maintenance,Electrician,Night Shift,No,Yes,5,Good hazard reporting,1,0,High
+WKR-036,Processing / Metallurgy,Metallurgical Technician,Day Shift,Yes,Yes,4,"Reported worn gloves, replacement issued",1,0,Low
+WKR-037,Mining Operations (Production),Loco Driver,Day Shift,Yes,Yes,5,Walkway partly blocked by materials,1,0,Medium
+WKR-038,Mining Operations (Production),Stope Miner,Night Shift,Yes,Yes,5,None,0,0,Medium
+WKR-039,Occupational Health & Safety,Safety Representative,Day Shift,No,Yes,7,Late for pre-shift safety talk,3,2,High
+WKR-040,Electrical Engineering,Instrument Technician,Day Shift,Yes,Yes,3,Walkway partly blocked by materials,0,0,Low
+WKR-041,Mine Surveying,Survey Assistant,Night Shift,Yes,Yes,7,Walkway partly blocked by materials,1,0,Medium
+WKR-042,Processing / Metallurgy,Plant Operator,Night Shift,Yes,Yes,7,Housekeeping needs improvement at work area,0,1,Medium
+WKR-043,Electrical Engineering,Electrical Engineer,Day Shift,Yes,Yes,2,Walkway partly blocked by materials,4,0,High
+WKR-044,Mining Operations (Production),Loco Driver,Day Shift,Yes,Yes,3,"Reported worn gloves, replacement issued",0,1,Low
+WKR-045,Emergency Response,First Aider,Day Shift,Yes,Yes,1,Fatigue noted at end of shift,1,1,Low

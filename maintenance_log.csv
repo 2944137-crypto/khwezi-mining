@@ -1,0 +1,12 @@
+Log ID,Equipment ID,Action,Date,Technician,Downtime Added (h),Notes
+MNT-001,TRK-012,Complete maintenance,2026-06-23,S. Dlamini,18,Last full service before overdue period
+MNT-002,LDR-003,Start maintenance,2026-08-02,T. Mokoena,20,Transmission inspection
+MNT-003,TRK-021,Complete maintenance,2026-09-01,T. Mokoena,10,Brake pads replaced
+MNT-004,BDZ-002,Complete maintenance,2026-09-06,L. Khumalo,16,Engine cooling system repaired
+MNT-005,EXC-004,Complete maintenance,2026-09-11,L. Khumalo,14,Track tensioning and oil change
+MNT-006,WNC-002,Complete maintenance,2026-09-16,T. Mokoena,9,Rope inspection and gearbox oil change
+MNT-007,TRK-014,Complete maintenance,2026-09-21,L. Khumalo,12,Scheduled 500 h service completed
+MNT-008,LDR-005,Complete maintenance,2026-09-26,L. Khumalo,8,Routine service and tyre check
+MNT-009,DRL-007,Complete maintenance,2026-10-01,T. Mokoena,6,Drill steel and feed chain replaced
+MNT-010,CNV-004,Complete maintenance,2026-10-06,L. Khumalo,5,Belt alignment and roller replacement
+MNT-011,EXC-001,Start maintenance,2026-10-16,L. Khumalo,150,Engine fault - hydraulic pump removed

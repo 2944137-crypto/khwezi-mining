@@ -1,0 +1,14 @@
+Equipment ID,Equipment Type,Manufacturer,Operating Hours,Temperature (C),Vibration (mm/s),Fuel Consumption (L/h),Brake Status,Tyre Status,Engine Status,Maintenance Status,Downtime (hours),Last Maintenance,Next Maintenance Due,Alert Count
+TRK-012,Haul Truck,Caterpillar,4200,92,9.2,85,Good,Worn,Good,Overdue,520,2026-06-23,2026-10-11,4
+TRK-014,Haul Truck,Komatsu,5100,74,3.8,80,Good,Good,Good,Operational,140,2026-09-21,2026-12-20,0
+TRK-021,Haul Truck,Volvo,3600,81,4.6,78,Worn,Good,Good,Operational,260,2026-09-01,2026-11-25,1
+LDR-003,Loader,Volvo,3300,85,4.1,55,Good,Good,Good,Due for Maintenance,210,2026-08-02,2026-10-28,2
+LDR-005,Loader,Caterpillar,2900,69,2.7,52,Good,Good,Good,Operational,95,2026-09-26,2026-12-25,0
+EXC-001,Excavator,Hitachi,6000,102,6.5,95,Good,Good,Faulty,Under Maintenance,900,2026-10-16,2026-11-15,5
+EXC-004,Excavator,Komatsu,4800,77,3.2,90,Good,Good,Good,Operational,180,2026-09-11,2026-12-10,0
+DRL-007,Drilling Machine,Epiroc,2800,70,2.9,40,Good,Good,Good,Operational,90,2026-10-01,2026-12-30,0
+DRL-009,Drilling Machine,Sandvik,3100,88,5.8,42,Good,Good,Worn,Due for Maintenance,300,2026-08-07,2026-10-31,3
+BDZ-002,Bulldozer,Caterpillar,3900,78,5.4,70,Worn,Good,Good,Operational,330,2026-09-06,2026-11-30,3
+WNC-002,Scraper Winch,Joy Global,2500,66,2.4,0,Good,Good,Good,Operational,70,2026-09-16,2026-12-15,0
+CRS-001,Crusher,Metso,7000,88,7.1,0,Good,Good,Good,Due for Maintenance,600,2026-07-28,2026-10-24,3
+CNV-004,Conveyor,Sandvik,7600,60,2.2,0,Good,Good,Good,Operational,60,2026-10-06,2027-01-19,0

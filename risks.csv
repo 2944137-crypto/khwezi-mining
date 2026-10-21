@@ -1,0 +1,16 @@
+Risk ID,Hazard,Department,Location,Likelihood,Consequence,Risk Score,Classification,Controls,Date,Assessed By
+RSK-001,Fall of ground in stope,Mining Operations (Production),Stope 4 West,4,5,20,Critical,Support installation and daily inspection,2026-09-02,K. Sithole
+RSK-002,Collision on main haul road,Mobile Equipment Maintenance,Main Haul Road,3,5,15,High,Speed limits and proximity detection,2026-10-04,N. Zulu
+RSK-003,Fire at conveyor drive,Fixed Plant Maintenance,Conveyor Belt 2,2,5,10,High,Fire suppression and belt switches,2026-08-25,N. Zulu
+RSK-004,Slip on wet workshop floor,Mobile Equipment Maintenance,Workshop,4,2,8,Medium,Drainage and anti-slip flooring,2026-08-23,K. Sithole
+RSK-005,Dust exposure in plant,Processing / Metallurgy,Processing Plant,4,3,12,High,Extraction and respirators,2026-10-08,M. Botha
+RSK-006,Electrical isolation failure,Electrical Engineering,Substation 2,2,4,8,Medium,Lock-out tag-out audit,2026-07-17,K. Sithole
+RSK-007,Seismic event in deep levels,Geotechnical Engineering,Haulage 12 Level,3,5,15,High,Seismic monitoring and re-entry rules,2026-08-10,N. Zulu
+RSK-008,Reagent spill,Processing / Metallurgy,Reagent Store,2,3,6,Medium,Bunding and spill kits,2026-08-23,N. Zulu
+RSK-009,Heat stress on night shift,Mining Operations (Production),Shaft Station,3,3,9,Medium,Hydration and rest schedule,2026-09-02,N. Zulu
+RSK-010,Unguarded rotating equipment,Fixed Plant Maintenance,Crusher Plant,3,4,12,High,Guard inspections,2026-10-15,N. Zulu
+RSK-011,Fatigue-related driving errors,Mobile Equipment Maintenance,Open Pit Bench 2,3,4,12,High,Fatigue management plan,2026-07-31,K. Sithole
+RSK-012,Emergency escape route blocked,Emergency Response,Shaft Station,1,5,5,Medium,Weekly route inspection,2026-07-07,M. Botha
+RSK-013,Noise exposure,Processing / Metallurgy,Crusher Plant,4,2,8,Medium,Hearing protection and zoning,2026-09-13,M. Botha
+RSK-014,Survey prism instability,Mine Surveying,Open Pit Bench 2,2,2,4,Low,Regular calibration,2026-07-08,N. Zulu
+RSK-015,Unsecured load at loading bay,Supply Chain & Logistics,Loading Bay,2,3,6,Medium,Load restraint checks,2026-07-20,N. Zulu
