@@ -1,15 +1,15 @@
 import streamlit as st
 import pandas as pd
-import plotly.graph_objects as go
+import numpy as np
 import csv, os, sys, subprocess, base64
-from datetime import date, datetime, timedelta
+import plotly.graph_objects as go
+from datetime import date, timedelta, timedelta
 from streamlit.runtime import exists
 
-# ------------------------------ START-UP ------------------------------
+# START-UP 
 BASE = os.path.dirname(os.path.abspath(__file__))   # data files live next to this program
 THEME = {"base": "dark", "primaryColor": "#2E8B57", "backgroundColor": "#1A1D21",
          "secondaryBackgroundColor": "#23272D", "textColor": "#9E9E9E"}
-
 
 def write_theme_config():
     """Save the colour theme to .streamlit/config.toml (once) so Streamlit's own widgets use it too."""
@@ -22,7 +22,6 @@ def write_theme_config():
     except OSError:
         pass   # the CSS below still applies the colours
 
-
 write_theme_config()
 if not exists():   # started with "python app.py": launch it through Streamlit instead
     subprocess.run([sys.executable, "-m", "streamlit", "run", __file__])
@@ -30,7 +29,7 @@ if not exists():   # started with "python app.py": launch it through Streamlit i
 
 st.set_page_config(page_title="KHWEZI MINING", page_icon=":pick:", layout="wide")
 
-# ------------------------------ CONSTANTS ------------------------------
+# Constants
 FILES = {k: os.path.join(BASE, v) for k, v in {
     "workers": "workers.csv", "incidents": "incidents.csv", "equipment": "equipment.csv",
     "maintenance_log": "maintenance_log.csv", "risks": "risks.csv"}.items()}
@@ -50,6 +49,7 @@ INC_TYPES = ["Fall of ground", "Slip / trip / fall", "Vehicle / equipment collis
              "Fire / explosion", "Electrical", "Struck by object", "Hazardous substance exposure",
              "Machinery entanglement", "Other"]
 EQ_TYPES = ["Haul Truck", "Loader", "Excavator", "Drilling Machine", "Bulldozer", "Scraper Winch", "Crusher", "Conveyor"]
+
 # Assumed owner of each equipment type; only used to link equipment downtime to departments in the analysis.
 EQ_DEPT = {"Haul Truck": "Mobile Equipment Maintenance", "Loader": "Mobile Equipment Maintenance",
            "Excavator": "Mobile Equipment Maintenance", "Bulldozer": "Mobile Equipment Maintenance",
@@ -62,6 +62,7 @@ EQ_COLS = ["Equipment ID", "Equipment Type", "Manufacturer", "Operating Hours", 
            "Maintenance Status", "Downtime (hours)", "Last Maintenance", "Next Maintenance Due", "Alert Count"]
 NUM_COLS = ["Operating Hours", "Temperature (C)", "Vibration (mm/s)", "Fuel Consumption (L/h)",
             "Downtime (hours)", "Alert Count"]
+
 # Educational prototype thresholds only - NOT manufacturer or mine safety limits
 LIMITS = {"Temperature": (80, 100, "°C"), "Vibration": (5, 8, "mm/s")}
 RISK_CLASSES = [(4, "Low"), (9, "Medium"), (16, "High"), (25, "Critical")]
@@ -88,7 +89,7 @@ PAGES = {"Administrator": ALL + ["Manage Users"],
                                   "General Reports"],
          "Manager": ALL}
 
-# ------------------------------ STYLE ------------------------------
+# Style
 st.markdown("""
 <style>
 :root{--bg:#1A1D21;--surf:#23272D;--head:#F0F3F7;--green:#1E5631;--green-hv:#2E8B57;--border:#607D8B;--focus:#3F51B5;--text:#9E9E9E;color-scheme:dark;}
@@ -117,21 +118,18 @@ S = st.session_state
 STRETCH = {"width": "stretch"} if tuple(int(x) for x in st.__version__.split(".")[:2]) >= (1, 50) \
     else {"use_container_width": True}
 
-
-# ------------------------------ DATA ------------------------------
+# Data
 for _key, _path in FILES.items():
     if _key not in S:   # load saved data once per session
         S[_key] = pd.read_csv(_path, keep_default_na=False).to_dict("records") if os.path.exists(_path) else []
 S.setdefault("logged_in", False)
 S.setdefault("role", "")
 
-
 def save(key):
     pd.DataFrame(S[key]).to_csv(FILES[key], index=False)
 
-
 def load_users():
-    """PART (a): reads users.csv into a dictionary (her original loop)."""
+    """PART (a): reads users.csv into a dictionary."""
     if not os.path.exists(USERS_FILE):   # FIX: create a demo file instead of crashing when users.csv is missing
         with open(USERS_FILE, "w", newline="") as f:
             f.write(DEMO_USERS)
@@ -147,21 +145,17 @@ def load_users():
                 users[file_username] = {"password": file_password, "role": file_role}
     return users
 
-
-# ------------------------------ LOGIC HELPERS ------------------------------
+# Logical Helpers
 def first_error(checks):
     """Return the message of the first failed check, or None."""
     return next((msg for failed, msg in checks if failed), None)
 
-
 def level(v, warn, crit):
     return "Critical" if v > crit else "Warning" if v >= warn else "Normal"
-
 
 def overall(temp, vib):
     levels = [level(temp, *LIMITS["Temperature"][:2]), level(vib, *LIMITS["Vibration"][:2])]
     return "Critical" if "Critical" in levels else "Warning" if "Warning" in levels else "Normal"
-
 
 def condition_alerts(eq_id, temp, vib):
     out = []
@@ -179,10 +173,8 @@ def condition_alerts(eq_id, temp, vib):
                                if is_crit else "Monitor closely and schedule an inspection.")})
     return out
 
-
 def find_eq(eq_id):
     return next((r for r in S["equipment"] if r["Equipment ID"] == eq_id), None)
-
 
 def equipment_df():
     """Equipment as a DataFrame with calculated Availability (%) and Condition."""
@@ -195,9 +187,7 @@ def equipment_df():
     df["Condition"] = [overall(t, v) for t, v in zip(df["Temperature (C)"], df["Vibration (mm/s)"])]
     return df
 
-
 FLAGS = ["Overdue", "Due", "Under Maintenance", "Excessive Downtime", "Repeated Alerts", "Low Availability"]
-
 
 def add_flags(df, window=14, min_avail=85, max_down=500, repeats=3):
     today = pd.Timestamp(date.today())
@@ -214,7 +204,6 @@ def add_flags(df, window=14, min_avail=85, max_down=500, repeats=3):
     df["Flags"] = df[FLAGS].apply(lambda r: ", ".join(c for c in FLAGS if r[c]), axis=1)
     return df
 
-
 def sample_equipment():
     d = lambda n: str(date.today() + timedelta(days=n))
     rows = [("TRK-012", "Haul Truck", "Caterpillar", 4200, 92, 9.2, 85, "Good", "Worn", "Good", "Overdue", 520, -120, -10, 4),
@@ -227,11 +216,9 @@ def sample_equipment():
             ("CNV-004", "Conveyor", "Sandvik", 7600, 60, 2.2, 0, "Good", "Good", "Good", "Operational", 60, -15, 90, 0)]
     return [dict(zip(EQ_COLS, r[:12] + (d(r[12]), d(r[13]), r[14]))) for r in rows]
 
-
 def classify_risk(score):
     """RiskScore = Likelihood x Consequence: 1-4 Low, 5-9 Medium, 10-16 High, 17-25 Critical."""
     return next(name for limit, name in RISK_CLASSES if score <= limit)
-
 
 def generate_alerts(role):
     """Build every active alert the role is allowed to see (based on the role's page access)."""
@@ -286,18 +273,16 @@ def generate_alerts(role):
     return out
 
 
-# ------------------------------ DISPLAY HELPERS ------------------------------
+# Display Helpers
 def alert_text(level_, id_type, id_, param, value, status, action):
     """Alert in the style of Figure 1 of the project brief."""
     line = "=" * 53
     return (f"{line}\nMINING MONITORING ALERT\n{line}\n[{level_.upper()}]\n{id_type}: {id_}\nParameter: {param}\n"
             f"Value: {value}\nStatus: {status}\nRecommended Action:\n {action}\n{line}")
 
-
 def show_alert(a):
     st.code(alert_text(a["Level"], a["ID Type"], a["ID"], a["Parameter"], a["Value"], a["Status"], a["Action"]),
             language=None)
-
 
 def show_condition_alerts(alerts):
     if not alerts:
@@ -306,11 +291,9 @@ def show_condition_alerts(alerts):
         st.write(a["Message"])
         show_alert(a)
 
-
 def notify(kind, payload):
     """Queue a message that is shown after the next rerun (so the page also shows the new data)."""
     S.setdefault("flash", []).append((kind, payload))
-
 
 def show_flash():
     for kind, payload in S.pop("flash", []):
@@ -319,15 +302,12 @@ def show_flash():
         else:
             getattr(st, kind)(payload)
 
-
 def fkey(name):
     """Form/widget key that changes when reset_form() is called, which clears the form."""
     return f"{name}_{S.get('ver_' + name, 0)}"
 
-
 def reset_form(name):
     S["ver_" + name] = S.get("ver_" + name, 0) + 1
-
 
 def show_table(df):
     """Interactive table; Level / Condition / Severity style columns are colour coded."""
@@ -342,7 +322,6 @@ def show_table(df):
                           subset=cols) if cols else df
     st.dataframe(data, hide_index=True, **STRETCH)
 
-
 def filter_df(df, cols, key):
     """Multiselect filters laid out in 3 columns; returns the filtered DataFrame."""
     layout = st.columns(3)
@@ -352,12 +331,10 @@ def filter_df(df, cols, key):
             df = df[df[c].astype(str).isin(sel)]
     return df
 
-
 def search_df(df, text):
     if text.strip() and not df.empty:
         df = df[df.astype(str).apply(lambda c: c.str.contains(text.strip(), case=False, regex=False)).any(axis=1)]
     return df
-
 
 def style_fig(fig, title, height=320):
     fig.update_layout(title=dict(text=title, font=dict(size=15, color=HEAD)), height=height,
@@ -366,7 +343,6 @@ def style_fig(fig, title, height=320):
     fig.update_xaxes(gridcolor="#33383F")
     fig.update_yaxes(gridcolor="#33383F")
     st.plotly_chart(fig, **STRETCH)
-
 
 def bar_chart(data, title, colors=None, horizontal=False, lines=(), height=320):
     """Bar chart from {label: value}; lines = [(value, colour, name)] draws threshold lines."""
@@ -391,13 +367,11 @@ def bar_chart(data, title, colors=None, horizontal=False, lines=(), height=320):
         fig.update_xaxes(tickangle=-30)
     style_fig(fig, title, height)
 
-
 def line_chart(series, title, height=320):
     fig = go.Figure(go.Scatter(x=[str(i) for i in series.index], y=series.values, mode="lines+markers",
                                line=dict(color=BAR), marker=dict(color=GREEN_HOVER, size=8)))
     fig.update_yaxes(rangemode="tozero", dtick=1 if series.max() <= 10 else None)
     style_fig(fig, title, height)
-
 
 def stacked_chart(table, title, height=320):
     """Stacked bars from a crosstab (rows = categories, columns = severity)."""
@@ -406,12 +380,10 @@ def stacked_chart(table, title, height=320):
     fig.update_layout(barmode="stack")
     style_fig(fig, title, height)
 
-
 def by_id(eq, col):
     return dict(zip(eq["Equipment ID"], eq[col])) if len(eq) else {}
 
-
-# ------------------------------ PAGES ------------------------------
+# Pages
 def page_dashboard():
     st.header("Dashboard")
     w, inc, eq, rk = pd.DataFrame(S["workers"]), pd.DataFrame(S["incidents"]), equipment_df(), pd.DataFrame(S["risks"])
@@ -454,7 +426,6 @@ def page_dashboard():
     else:
         st.success("No active alerts.")
 
-
 def page_alerts():
     st.header("Alerts and Notifications")
     alerts = generate_alerts(S["role"])
@@ -478,18 +449,16 @@ def page_alerts():
         pick = st.selectbox("Select an alert to see the full notification and recommended action", labels)
         show_alert(shown[labels.index(pick)])
 
-
-# =====================================================================
 # PART (b) WORKER HEALTH AND SAFETY MONITORING  -  written by Group Member 1
 # Her original logic is kept: same fields, same risk rules, same messages.
 # Every change is marked "FIX:" so it is easy to explain in the interview.
-# =====================================================================
+# --------------------------------------------------------------------
 def page_workers():
     st.header("Worker Health and Safety Monitoring")
     st.write("Record the worker's safety data and look for potential health and safety risks.")
     st.subheader("Record Worker Information")
 
-    # --- input fields (same order as the original code) ---
+    # Input fields (same order as the original code) 
     worker_id = st.text_input("Worker's ID")
     department = st.selectbox("Select Department", [""] + DEPTS)   # FIX: shared DEPTS list instead of a long list typed inside the page
     job_role = st.text_input("Job Role")
@@ -542,12 +511,10 @@ def page_workers():
     else:
         st.info("Workers' data has not yet been recorded!")
 
-
-# =====================================================================
 # PART (c) SAFETY INCIDENT DATABASE  -  written by Group Member 1
 # The recording form is hers. FIX: the missing fields and the
 # view / search / filter / count / trend tabs were added to meet the brief.
-# =====================================================================
+# --------------------------------------------------------------------
 def page_incidents():
     st.header("Safety Incidents Database")
     st.write("Record and monitor safety incidents that occur at the mine")
@@ -634,7 +601,6 @@ def page_incidents():
             if len(dates):
                 line_chart(dates.dt.strftime("%Y-%m" if monthly else "%Y-%m-%d").value_counts().sort_index(),
                            f"Incidents per {'month' if monthly else 'day'}")
-
 
 def page_equipment():
     st.header("Equipment Data and Condition Monitoring")
@@ -734,7 +700,7 @@ def page_equipment():
             for a in sorted(all_alerts, key=lambda a: a["Level"] != "Critical"):
                 with st.expander(f"[{a['Level'].upper()}] {a['ID']} - {a['Parameter']}"):
                     show_condition_alerts([a])
-
+                    
     with tab_ch:
         if df.empty:
             st.info("No equipment has been recorded yet.")
@@ -752,7 +718,6 @@ def page_equipment():
                           colors={k: COND_COLORS[level(v, *LIMITS["Vibration"][:2])] for k, v in vibs.items()})
             with c3:
                 bar_chart({k: int(n.get(k, 0)) for k in COND_COLORS}, "Equipment condition", colors=COND_COLORS)
-
 
 def page_maintenance():
     st.header("Equipment Maintenance Monitoring")
@@ -857,7 +822,6 @@ def page_maintenance():
         with c3:
             bar_chart(by_id(df, "Alert Count"), "Alerts per equipment", horizontal=True)
 
-
 def page_risk():
     st.header("Risk Assessment")
     tab_add, tab_reg = st.tabs(["Assess Risk", "Risk Register"])
@@ -922,7 +886,6 @@ def page_risk():
                              for c in grid.columns}, index=grid.index)
         st.dataframe(grid.style.apply(lambda _: zone, axis=None), **STRETCH)
 
-
 def page_reports():
     st.header("General Reports")
     sets = [("Worker records", "workers"), ("Incident records", "incidents"), ("Equipment records", "equipment"),
@@ -937,17 +900,14 @@ def page_reports():
             else:
                 st.info(f"No {label.lower()} are available.")
 
-
 def page_users():
     st.header("Manage Users")
     st.write("Users loaded from users.csv:")
     show_table(pd.DataFrame([{"Username": u, "Role": v["role"]} for u, v in load_users().items()]))
 
-
-# ------------------------------ (j) INTERACTIVE DATA ANALYSIS ------------------------------
+# j) Interactive Data Analysis 
 QUESTIONS = {}   # category -> {question text: function}
 SOURCE_NAMES = {"inc": "incident", "w": "worker", "eq": "equipment", "rk": "risk assessment"}
-
 
 def question(category, text, needs=()):
     """Register an analysis question; `needs` lists the data sets that must contain records."""
@@ -962,15 +922,12 @@ def question(category, text, needs=()):
         return fn
     return register
 
-
 def answer(msg):
     st.info("**Answer:** " + msg)
-
 
 def leaders(counts):
     top = counts[counts == counts.max()]
     return ", ".join(map(str, top.index)), counts.max()
-
 
 def most_incidents(d, col, what, horizontal=True):
     counts = d["inc"][col].astype(str).str.strip().value_counts()
@@ -978,18 +935,15 @@ def most_incidents(d, col, what, horizontal=True):
     answer(f"The {what} with the most incidents: **{names}** ({n} incident{'s' if n != 1 else ''}).")
     bar_chart(counts.to_dict(), f"Incidents by {what}", horizontal=horizontal)
 
-
 def eq_extreme(d, col, what, unit="", highest=True, lines=()):
     s = d["eq"].set_index("Equipment ID")[col]
     val = s.max() if highest else s.min()
     answer(f"{what}: **{', '.join(s[s == val].index)}** ({val:g}{unit}).")
     bar_chart(s.sort_values(ascending=not highest).to_dict(), col, horizontal=True, lines=lines)
 
-
 def equipment_table(df, cols=("Equipment ID", "Equipment Type", "Availability (%)", "Downtime (hours)", "Alert Count",
                               "Next Maintenance Due", "Maintenance Status", "Flags")):
     show_table(df[[c for c in cols if c in df.columns]])
-
 
 def dept_risk(d):
     """Safety risk index per department = high-risk workers + high/critical incidents + high/critical risks."""
@@ -1006,7 +960,6 @@ def dept_risk(d):
     df["Safety risk index"] = df.sum(axis=1)
     return df.sort_values("Safety risk index", ascending=False)
 
-
 def dept_table(d):
     t = dept_risk(d)
     if not d["eq"].empty:
@@ -1014,10 +967,8 @@ def dept_table(d):
         t = t.join(down.rename("Equipment downtime (h)"), how="outer").fillna(0)
     return t
 
-
-# ---- Health and Safety ----
+# Health and Safety 
 HS = "Health and Safety"
-
 
 @question(HS, "How many safety incidents occurred during the selected period?")
 def q_incident_count(d):
@@ -1025,16 +976,13 @@ def q_incident_count(d):
     if len(d["inc"]):
         line_chart(d["inc"]["Date"].dt.strftime("%Y-%m").value_counts().sort_index(), "Incidents per month")
 
-
 @question(HS, "Which department has the highest number of incidents?", ("inc",))
 def q_dept_incidents(d):
     most_incidents(d, "Department", "department")
 
-
 @question(HS, "Which shift records the most incidents?", ("inc",))
 def q_shift_incidents(d):
     most_incidents(d, "Shift", "shift", horizontal=False)
-
 
 @question(HS, "What percentage of workers comply with PPE requirements?", ("w",))
 def q_ppe(d):
@@ -1046,7 +994,6 @@ def q_ppe(d):
         st.markdown("**Non-compliant workers**")
         show_table(w[w["PPE"] == "No"][["Worker's ID", "Department", "Job Role", "Shift", "Risk Level"]])
 
-
 @question(HS, "How many near misses have been recorded?", ("w",))
 def q_near_misses(d):
     nm = pd.to_numeric(d["w"]["Near Misses"])
@@ -1054,11 +1001,9 @@ def q_near_misses(d):
     by_dept = d["w"].assign(**{"Near Misses": nm}).groupby("Department")["Near Misses"].sum()
     bar_chart(by_dept[by_dept > 0].sort_values(ascending=False).to_dict(), "Near misses by department", horizontal=True)
 
-
 @question(HS, "Which incident types occur most frequently?", ("inc",))
 def q_incident_types(d):
     most_incidents(d, "Incident Type", "incident type")
-
 
 @question(HS, "How many incidents are classified as high or critical?", ("inc",))
 def q_high_critical(d):
@@ -1070,7 +1015,6 @@ def q_high_critical(d):
     if len(hc):
         show_table(hc[["Incident ID", "Date", "Department", "Incident Type", "Severity", "Status"]])
 
-
 @question(HS, "Which departments have the highest safety risk?")
 def q_dept_risk(d):
     t = dept_risk(d)
@@ -1081,7 +1025,6 @@ def q_dept_risk(d):
     st.caption("Safety risk index = high-risk workers + high/critical incidents + high/critical risk assessments.")
     bar_chart(t["Safety risk index"].head(10).to_dict(), "Safety risk index by department", horizontal=True)
     show_table(t.reset_index(names="Department"))
-
 
 @question(HS, "Is there an observable difference in incidents between day and night shifts?", ("inc",))
 def q_day_night(d):
@@ -1098,7 +1041,6 @@ def q_day_night(d):
     stacked_chart(pd.crosstab(inc["Shift"], inc["Severity"]).reindex(columns=list(SEV_COLORS)).dropna(axis=1, how="all"),
                   "Incidents by shift and severity")
 
-
 @question(HS, "Which safety conditions require immediate attention?")
 def q_attention(d):
     urgent = [a for a in d["alerts"] if a["ID Type"] != "Equipment ID" and a["Level"] == "Critical"]
@@ -1107,10 +1049,8 @@ def q_attention(d):
     answer(f"**{len(urgent)}** critical safety condition(s) need immediate attention.")
     show_table(pd.DataFrame(urgent)[["Level", "Category", "ID Type", "ID", "Value", "Action"]])
 
-
-# ---- Equipment ----
+# Equipment 
 EQ = "Equipment"
-
 
 @question(EQ, "Which equipment has the highest downtime?", ("eq",))
 def q_eq_downtime(d):
@@ -1180,7 +1120,7 @@ def q_eq_inspection(d):
     show_table(df[["Equipment ID", "Equipment Type", "Temperature (C)", "Vibration (mm/s)", "Condition", "Reason"]])
 
 
-# ---- Integrated ----
+# Combination of Safe and Equipment
 IN = "Integrated Safety and Equipment Analysis"
 
 
@@ -1372,13 +1312,12 @@ def page_analysis():
     st.subheader(q)
     QUESTIONS[cat][q](data)
 
+# Login 
 
-# ------------------------------ LOGIN ------------------------------
-# =====================================================================
 # PART (a) ACCESS CONTROL - LOGIN  -  written by Group Member 1
 # Her flow is kept: read users.csv -> check username and password ->
 # store the role in session_state -> rerun so the user's pages appear.
-# =====================================================================
+# --------------------------------------------------------------------
 @st.cache_data
 def login_background():
     """The login picture (logo + mine at sunrise) as base64; empty text if login_bg.jpg is missing."""
@@ -1387,7 +1326,6 @@ def login_background():
         return ""
     with open(path, "rb") as f:
         return base64.b64encode(f.read()).decode()
-
 
 picture = login_background()
 if S["logged_in"] or not picture:   # the logo picture already shows the company name, so the banner is only used without it
@@ -1422,7 +1360,7 @@ if not S["logged_in"]:
                 if match and password == users[match]["password"]:
                     user_role = users[match]["role"]   # the role that belongs to the username in the csv
                     S["logged_in"] = True
-                    S["role"] = ROLE_ALIASES.get(user_role, user_role)   # FIX: "Maintenance Manager" -> "Maintenance Engineer" (brief)
+                    S["role"] = ROLE_ALIASES.get(user_role, user_role)   
                     S["greeted"] = False
                     st.rerun()   # restart the script: logged_in is now True, so the login page is skipped
                 else:
@@ -1433,7 +1371,7 @@ if not S["logged_in"]:
     st.stop()   # nothing below the login page is shown until the user is logged in
     # FIX: the old code also waited 3 seconds (time.sleep) after login, which only slowed the app down
 
-# ------------------------------ NAVIGATION ------------------------------
+# Navigation -------------------------------------------------------------
 # PART (a): role-based navigation - each role only sees the pages listed for it in PAGES
 role = S["role"]
 st.sidebar.title("Khwezi Mining")
