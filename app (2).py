@@ -35,9 +35,10 @@ FILES = {k: os.path.join(BASE, v) for k, v in {
     "workers": "workers.csv", "incidents": "incidents.csv", "equipment": "equipment.csv",
     "maintenance_log": "maintenance_log.csv", "risks": "risks.csv"}.items()}
 USERS_FILE = os.path.join(BASE, "users.csv")
-DEMO_USERS = ("username,password,role\nadmin,admin123,Administrator\nsafety,safety123,Safety Officer\n"
-              "engineer,engineer123,Mine Engineer\nmaintenance,maint123,Maintenance Engineer\n"
-              "manager,manager123,Manager\n")
+DEMO_USERS = ("username,password,role\nLesiba,123,Administrator\nNatey,123,Mine Engineer\nSafetyUser,2468,Safety Officer\n"
+              "MaintenanceUser,123,Maintenance Engineer\nManagerUser,123,Manager\nInnocent,123,Administrator\n"
+              "Thato,123,Mine Engineer\nReesegofetse,123,Safety Officer\nTyler,123,Maintenance Engineer\n"
+              "Fortunate,123,Manager\n")
 ROLE_ALIASES = {"Maintenance Manager": "Maintenance Engineer", "Mining Engineer": "Mine Engineer"}
 
 DEPTS = ["Community Relations", "Electrical Engineering", "Emergency Response", "Environmental Management",
@@ -1415,9 +1416,10 @@ if not S["logged_in"]:
             username = st.text_input("Username")
             password = st.text_input("Password", type="password")
             if st.form_submit_button("Login"):
-                # checks that the username exists and the password matches the one on the same row of the csv
-                if username.strip() in users and password == users[username.strip()]["password"]:
-                    user_role = users[username.strip()]["role"]   # the role that belongs to the username in the csv
+                # FIX: the username is not case-sensitive ("innocent" works for "Innocent"); the password still is
+               match = next((u for u in users if u.lower() == username.strip().lower()), None)
+               if match and password == users[match]["password"]:
+                   user_role = users[match]["role"]   # the role that belongs to the username in the csv  # the role that belongs to the username in the csv
                     S["logged_in"] = True
                     S["role"] = ROLE_ALIASES.get(user_role, user_role)   # FIX: "Maintenance Manager" -> "Maintenance Engineer" (brief)
                     S["greeted"] = False
@@ -1426,7 +1428,7 @@ if not S["logged_in"]:
                     st.error("Incorrect username or password. Enter the correct credentials or contact the system administrator.")
         if S.get("demo_users"):
             st.info("users.csv was not found, so a demo file was created.\n\n"
-                    "Try admin / admin123 (also safety123, engineer123, maint123, manager123).")
+                    "Try Lesiba / 123 (Administrator).")
     st.stop()   # nothing below the login page is shown until the user is logged in
     # FIX: the old code also waited 3 seconds (time.sleep) after login, which only slowed the app down
 
