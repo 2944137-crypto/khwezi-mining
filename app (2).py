@@ -844,19 +844,19 @@ else:
 # FIX: "Data Analysis" (part j) was added to every list.
 
     if role == "Administrator":
-        page = ["<CHOOSE>", "Dashboard", "Worker Safety Data", "Equipment Data", "Maintenance Data", "Manage Users", "Safety Incidents", "Risk Assessment", "Alerts", "Data Analysis", "General Reports"]
+        page = ["Dashboard", "Worker Safety Data", "Equipment Data", "Maintenance Data", "Manage Users", "Safety Incidents", "Risk Assessment", "Alerts", "Data Analysis", "General Reports"]
 
     elif role == "Safety Officer":
-        page = ["<CHOOSE>", "Dashboard", "Worker Safety Data", "Safety Incidents", "Risk Assessment", "Alerts", "Data Analysis", "General Reports"]
+        page = ["Dashboard", "Worker Safety Data", "Safety Incidents", "Risk Assessment", "Alerts", "Data Analysis", "General Reports"]
 
     elif role == "Mine Engineer":
-        page = ["<CHOOSE>", "Dashboard", "Worker Safety Data", "Equipment Data", "Maintenance Data", "Safety Incidents", "Risk Assessment", "Alerts", "Data Analysis", "General Reports"]
+        page = ["Dashboard", "Worker Safety Data", "Equipment Data", "Maintenance Data", "Safety Incidents", "Risk Assessment", "Alerts", "Data Analysis", "General Reports"]
 
     elif role == "Maintenance Engineer": # FIX: was "Maintenance Manager", which does not match users.csv, so these users got the full "else" list below
-        page = ["<CHOOSE>", "Dashboard", "Equipment Data", "Maintenance Data", "Alerts", "Data Analysis", "General Reports"] 
+        page = ["Dashboard", "Equipment Data", "Maintenance Data", "Alerts", "Data Analysis", "General Reports"] 
 
     else:
-        page = ["<CHOOSE>", "Dashboard", "Worker Safety Data", "Equipment Data", "Maintenance Data", "Safety Incidents", "Risk Assessment", "Alerts", "Data Analysis", "General Reports"]
+        page = ["Dashboard", "Worker Safety Data", "Equipment Data", "Maintenance Data", "Safety Incidents", "Risk Assessment", "Alerts", "Data Analysis", "General Reports"]
 
     selected_page = st.sidebar.selectbox("Select a section", page, index=0)  #might be bad!!!!!!!!!!!
 
