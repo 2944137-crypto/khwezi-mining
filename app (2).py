@@ -858,7 +858,7 @@ else:
     else:
         page = ["<CHOOSE>", "Dashboard", "Worker Safety Data", "Equipment Data", "Maintenance Data", "Safety Incidents", "Risk Assessment", "Alerts", "Data Analysis", "General Reports"]
 
-    selected_page = st.sidebar.selectbox("Select a section", page)  #might be bad!!!!!!!!!!!
+    selected_page = st.sidebar.selectbox("Select a section", page, index=0)  #might be bad!!!!!!!!!!!
 
     st.write(" Hello!, ", role, "! Welcome to the Khwezi Mining Health, Safety and Equipment Monitoring System.")
 
