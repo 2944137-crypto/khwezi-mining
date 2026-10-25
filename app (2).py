@@ -284,8 +284,8 @@ def by_id(eq, col):
 
 @st.cache_data
 def login_background():
-    """The login picture (logo + mine at sunrise) as base64; empty text if login_bg.jpg is missing."""
-    path = os.path.join(BASE, "login_bg.jpg")
+    """The login picture (logo + mine at sunrise) as base64; empty text if login_bg.jpeg is missing."""
+    path = os.path.join(BASE, "login_bg.jpeg")
     if not os.path.exists(path):
         return ""
     with open(path, "rb") as f:
@@ -724,7 +724,7 @@ def page_analysis(pages):
 # MAIN PROGRAM - the group's elif-chain style is kept (no function def for pages a to h).
 # Lines marked "FIX:" are the only changes made to the members' code.
 # =====================================================================
-picture = login_background()   # the login picture (empty text if login_bg.jpg is missing)
+picture = login_background()   # the login picture (empty text if login_bg.jpeg is missing)
 
 #initializing the state session before logging in.
 # (the data is already loaded from the csv files above, so the lists below only matter if a csv file is missing)
